@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UmrohPrompt.ai - Generator Prompt Riset Umroh</title>
+    <title>UmrohPrompt.ai - Generator Prompt Paket Umroh & Wisata Halal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -52,7 +52,7 @@
         <!-- Header -->
         <header class="text-center mb-10">
             <h1 class="text-4xl font-bold text-emerald-700">UmrohPrompt.ai</h1>
-            <p class="text-lg text-gray-600 mt-2">Asisten AI untuk merencanakan umroh mandiri Anda dengan cerdas.</p>
+            <p class="text-lg text-gray-600 mt-2">Asisten AI untuk merancang paket umroh dan wisata halal profesional.</p>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
@@ -60,7 +60,7 @@
             <!-- Kolom Form Input -->
             <div class="lg:col-span-3 bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
                 <form id="promptForm">
-                    <h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-4">📝 Buat Prompt Rencana Umroh</h2>
+                    <h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-4">📝 Buat Proposal Perjalanan</h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Informasi Perjalanan -->
@@ -86,13 +86,30 @@
                             </select>
                         </div>
                         <div>
-                            <label for="durasi" class="form-label">Durasi Umroh (hari)</label>
-                            <input type="number" id="durasi" class="form-input" value="10" min="5">
+                            <label for="durasi" class="form-label">Total Durasi (hari)</label>
+                            <input type="number" id="durasi" class="form-input" value="12" min="5">
                         </div>
                         <div>
                             <label for="jumlahPax" class="form-label">Jumlah Jamaah (pax)</label>
                             <input type="number" id="jumlahPax" class="form-input" value="2" min="1">
                         </div>
+
+                        <!-- Opsi Tour Tambahan -->
+                        <div class="md:col-span-2">
+                            <label for="plusTour" class="form-label">Paket Perjalanan</label>
+                            <select id="plusTour" class="form-input">
+                                <option value="Hanya Umroh" selected>Hanya Umroh</option>
+                                <option value="Turki">Umroh Plus Turki</option>
+                                <option value="Dubai">Umroh Plus Dubai</option>
+                                <option value="Mesir">Umroh Plus Mesir</option>
+                                <option value="Lainnya">Umroh Plus Lainnya...</option>
+                            </select>
+                        </div>
+                        <div id="otherTourDiv" class="md:col-span-2 hidden">
+                             <label for="otherTourInput" class="form-label">Kota/Negara Tambahan</label>
+                            <input type="text" id="otherTourInput" class="form-input" placeholder="Contoh: Aqsa, Jordan">
+                        </div>
+
 
                         <!-- Preferensi -->
                         <div>
@@ -104,6 +121,14 @@
                             </select>
                         </div>
                         <div>
+                             <label for="jenisPenerbangan" class="form-label">Jenis Penerbangan</label>
+                            <select id="jenisPenerbangan" class="form-input">
+                                <option value="Fleksibel (Keduanya)">Fleksibel (Keduanya)</option>
+                                <option value="Langsung">Langsung (Direct)</option>
+                                <option value="Transit">Transit</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2">
                             <label for="hotel" class="form-label">Preferensi Hotel</label>
                             <select id="hotel" class="form-input">
                                 <option value="Bintang 3, dekat Masjidil Haram">Bintang 3, dekat Masjidil Haram</option>
@@ -116,21 +141,13 @@
                             <label for="budget" class="form-label">Estimasi Budget per Orang (Rupiah)</label>
                             <input type="text" id="budget" class="form-input" placeholder="Contoh: 25.000.000 - 35.000.000">
                         </div>
-
-                        <!-- Tambahan -->
-                        <div class="md:col-span-2">
-                            <label class="flex items-center space-x-3 mt-4">
-                                <input type="checkbox" id="cityTour" class="h-5 w-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
-                                <span class="text-gray-700">Sertakan City Tour & Ziarah</span>
-                            </label>
-                        </div>
                     </div>
 
                     <!-- Tombol Aksi -->
                     <div class="mt-8 flex flex-col sm:flex-row gap-4">
                         <button type="button" id="generateButton" class="btn btn-primary w-full sm:w-auto flex-grow justify-center">
                             <i data-lucide="wand-2" class="icon"></i>
-                            Buat Prompt Saya
+                            Buat Proposal Prompt
                         </button>
                         <button type="reset" id="resetButton" class="btn btn-secondary w-full sm:w-auto justify-center">
                            <i data-lucide="rotate-cw" class="icon"></i>
@@ -144,7 +161,7 @@
             <div class="lg:col-span-2 space-y-8">
                 <!-- Output Prompt -->
                 <div id="outputSection" class="prompt-output-container hidden">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">✅ Prompt Anda Siap Digunakan</h3>
+
                     <p id="promptOutput" class="text-gray-700 bg-white p-4 rounded-md whitespace-pre-wrap"></p>
                     <div class="mt-4 flex gap-4">
                         <button id="copyButton" class="btn btn-copy w-full flex-grow justify-center">
@@ -159,13 +176,13 @@
                     <h3 class="text-xl font-bold mb-6 text-gray-800 border-b pb-4">⚡️ Butuh Cepat? Coba Template Ini</h3>
                     <div class="space-y-3">
                          <button class="w-full text-left p-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors" data-template="itinerary">
-                            <strong>✈️ Itinerary Lengkap:</strong> Buat jadwal perjalanan detail.
+                            <strong>✈️ Itinerary Umroh Lengkap:</strong> Buat jadwal perjalanan detail.
                         </button>
                         <button class="w-full text-left p-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors" data-template="biaya">
-                            <strong>💰 Rincian Biaya:</strong> Buat simulasi total biaya umroh.
+                            <strong>💰 Rincian Biaya Umroh:</strong> Buat simulasi total biaya.
                         </button>
                          <button class="w-full text-left p-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors" data-template="legalitas">
-                            <strong>🛡️ Cek Legalitas Travel:</strong> Cara verifikasi travel agent resmi Kemenag.
+                            <strong>🛡️ Cek Legalitas Travel:</strong> Cara verifikasi travel agent.
                         </button>
                          <button class="w-full text-left p-3 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors" data-template="panduan">
                             <strong>📚 Panduan Ibadah:</strong> Daftar doa dan panduan manasik.
@@ -193,6 +210,10 @@
         const promptOutput = document.getElementById('promptOutput');
         const copyButtonText = document.getElementById('copyButtonText');
         
+        // Elemen baru
+        const plusTourSelect = document.getElementById('plusTour');
+        const otherTourDiv = document.getElementById('otherTourDiv');
+        
         const templateButtons = document.querySelectorAll('[data-template]');
 
         const templates = {
@@ -203,37 +224,46 @@
         };
 
         function generateMainPrompt() {
+            // Mengambil nilai dari setiap input
             const kotaAsal = document.getElementById('kotaAsal').value.trim() || 'Jakarta';
             const bulan = document.getElementById('bulan').value;
             const durasi = document.getElementById('durasi').value;
             const jumlahPax = document.getElementById('jumlahPax').value;
+            const tourChoice = plusTourSelect.value;
+            const otherTour = document.getElementById('otherTourInput').value.trim();
             const maskapai = document.getElementById('maskapai').value;
+            const jenisPenerbangan = document.getElementById('jenisPenerbangan').value;
             const hotel = document.getElementById('hotel').value;
             const budget = document.getElementById('budget').value.trim();
-            const cityTour = document.getElementById('cityTour').checked;
 
-            let prompt = `Tolong buatkan rencana dan estimasi biaya untuk perjalanan umroh mandiri dengan detail sebagai berikut:\n\n`;
-            prompt += `- **Tujuan:** Umroh Mandiri\n`;
+            let tourText = "";
+            if (tourChoice !== "Hanya Umroh") {
+                tourText = (tourChoice === "Lainnya") ? otherTour : tourChoice;
+            }
+
+            // Membangun string prompt secara dinamis
+            let prompt = `Buatkan proposal paket perjalanan untuk ${tourChoice === "Hanya Umroh" ? "Umroh" : `Umroh Plus tour ke ${tourText}`} dengan detail sebagai berikut:\n\n`;
+            prompt += `**A. DETAIL PERMINTAAN**\n`;
+            prompt += `- **Jenis Paket:** ${tourChoice === "Hanya Umroh" ? "Hanya Umroh" : `Umroh Plus ${tourText}`}\n`;
             prompt += `- **Asal Keberangkatan:** ${kotaAsal}, Indonesia\n`;
             prompt += `- **Waktu:** Bulan ${bulan}\n`;
-            prompt += `- **Durasi:** ${durasi} hari\n`;
-            prompt += `- **Jumlah Jamaah:** ${jumlahPax} orang\n\n`;
+            prompt += `- **Total Durasi:** ${durasi} hari\n`;
+            prompt += `- **Jumlah Peserta:** ${jumlahPax} orang\n\n`;
             
-            prompt += `**Preferensi:**\n`;
+            prompt += `**B. PREFERENSI**\n`;
             prompt += `- **Maskapai:** Kelas ${maskapai}\n`;
+            prompt += `- **Jenis Penerbangan:** ${jenisPenerbangan}\n`;
             prompt += `- **Akomodasi:** Hotel ${hotel}\n`;
             
             if (budget) {
-                prompt += `- **Estimasi Budget:** Sekitar Rp ${budget} per orang\n`;
-            }
-            if (cityTour) {
-                prompt += `- **Tambahan:** Mohon sertakan jadwal dan biaya untuk city tour di Mekkah & Madinah, serta ziarah ke tempat-tempat bersejarah.\n\n`;
+                prompt += `- **Estimasi Budget per Orang:** Sekitar Rp ${budget}\n\n`;
             }
 
-            prompt += `Mohon berikan output dalam bentuk rincian yang jelas, mencakup:\n`;
-            prompt += `1.  **Contoh Itinerary Harian:** Jadwal perjalanan dari hari ke-1 hingga hari ke-${durasi}.\n`;
-            prompt += `2.  **Estimasi Rincian Biaya:** Breakdown biaya untuk tiket pesawat, hotel, visa, makan, transportasi lokal, dan city tour (jika ada).\n`;
-            prompt += `3.  **Rekomendasi:** Maskapai dan tips praktis untuk perjalanan ini.`;
+            prompt += `**C. OUTPUT YANG DIHARAPKAN**\n`;
+            prompt += `Mohon berikan rincian yang jelas, dengan format sebagai berikut:\n`;
+            prompt += `1.  **Rancangan Itinerary Harian:** Buat jadwal perjalanan detail dari hari ke-1 hingga hari ke-${durasi}. ${tourChoice !== "Hanya Umroh" ? `Pisahkan dengan jelas antara jadwal untuk ibadah umroh dan jadwal untuk tur di ${tourText}.` : ""}\n`;
+            prompt += `2.  **Estimasi Rincian Biaya (Breakdown):** Buat estimasi biaya per orang mencakup tiket pesawat, visa, hotel, makan, transportasi lokal, dan pemandu. ${tourChoice !== "Hanya Umroh" ? `Pisahkan dengan jelas estimasi biaya untuk paket umroh dan biaya untuk paket tur tambahan ke ${tourText}.` : ""}\n`;
+            prompt += `3.  **Rekomendasi & Opsi:** Berikan rekomendasi 2-3 maskapai penerbangan. Jika ada, berikan juga opsi aktivitas atau kunjungan tambahan di setiap kota.`;
 
             displayPrompt(prompt);
         }
@@ -244,57 +274,47 @@
             outputSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         
-        // **PERBAIKAN FUNGSI SALIN**
-        // Fungsi salin yang lebih kompatibel
         function copyToClipboard(text) {
-            // Buat elemen textarea sementara
             const textArea = document.createElement("textarea");
             textArea.value = text;
-            
-            // Atur agar tidak terlihat di layar
             textArea.style.position = "fixed";
             textArea.style.top = 0;
             textArea.style.left = 0;
-            textArea.style.width = '2em';
-            textArea.style.height = '2em';
-            textArea.style.padding = 0;
-            textArea.style.border = 'none';
-            textArea.style.outline = 'none';
-            textArea.style.boxShadow = 'none';
-            textArea.style.background = 'transparent';
-
             document.body.appendChild(textArea);
             textArea.focus();
             textArea.select();
-
             try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    // Feedback visual saat berhasil menyalin
-                    copyButtonText.textContent = 'Tersalin!';
-                    copyButton.querySelector('i').setAttribute('data-lucide', 'check-circle');
+                document.execCommand('copy');
+                copyButtonText.textContent = 'Tersalin!';
+                copyButton.querySelector('i').setAttribute('data-lucide', 'check-circle');
+                lucide.createIcons();
+                setTimeout(() => {
+                    copyButtonText.textContent = 'Salin Prompt';
+                    copyButton.querySelector('i').setAttribute('data-lucide', 'copy');
                     lucide.createIcons();
-                    
-                    setTimeout(() => {
-                        copyButtonText.textContent = 'Salin Prompt';
-                        copyButton.querySelector('i').setAttribute('data-lucide', 'copy');
-                        lucide.createIcons();
-                    }, 2000);
-                }
+                }, 2000);
             } catch (err) {
-                console.error('Gagal menyalin teks:', err);
                 alert('Gagal menyalin. Mohon salin secara manual.');
             }
-
             document.body.removeChild(textArea);
         }
 
-
+        // Event Listener untuk tombol Generate
         generateButton.addEventListener('click', (e) => {
             e.preventDefault();
             generateMainPrompt();
         });
 
+        // Event listener untuk pilihan tour
+        plusTourSelect.addEventListener('change', () => {
+            if(plusTourSelect.value === 'Lainnya') {
+                otherTourDiv.classList.remove('hidden');
+            } else {
+                otherTourDiv.classList.add('hidden');
+            }
+        });
+
+        // Event Listener untuk tombol template
         templateButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const templateKey = button.dataset.template;
@@ -304,7 +324,6 @@
             });
         });
         
-        // Event listener baru untuk tombol salin
         copyButton.addEventListener('click', () => {
             copyToClipboard(promptOutput.textContent);
         });
@@ -312,9 +331,11 @@
         resetButton.addEventListener('click', () => {
              outputSection.classList.add('hidden');
              promptOutput.textContent = '';
+             otherTourDiv.classList.add('hidden'); // Sembunyikan juga saat reset
         });
 
     </script>
 </body>
 </html>
+
 
