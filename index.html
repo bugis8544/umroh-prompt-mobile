@@ -175,6 +175,51 @@
             </div>
         </div>
 
+<!-- Bagian Form Feedback -->
+<div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg mt-8">
+    <h3 class="text-xl font-bold mb-6 text-gray-800 border-b pb-4">✍️ Punya Saran atau Masukan?</h3>
+    <form name="submit-to-google-sheet" id="feedbackForm">
+        <div class="space-y-4">
+            <div>
+                <label for="nama" class="form-label">Nama Anda (Opsional)</label>
+                <input type="text" name="nama" class="form-input" placeholder="Nama Anda">
+            </div>
+            <div>
+                <label for="saran" class="form-label">Saran & Masukan</label>
+                <textarea name="saran" class="form-input" rows="4" placeholder="Saran Anda sangat berarti bagi kami..." required></textarea>
+            </div>
+            <div>
+                <label class="form-label">Seberapa Bermanfaat Aplikasi Ini?</label>
+                <div class="flex items-center justify-around text-3xl">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="rating" value="😔" class="sr-only peer">
+                        <span class="peer-checked:scale-125 peer-checked:grayscale-0 grayscale transition-all">😔</span>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="rating" value="😐" class="sr-only peer">
+                        <span class="peer-checked:scale-125 peer-checked:grayscale-0 grayscale transition-all">😐</span>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="rating" value="🙂" class="sr-only peer" checked>
+                        <span class="peer-checked:scale-125 peer-checked:grayscale-0 grayscale transition-all">🙂</span>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="rating" value="😊" class="sr-only peer">
+                        <span class="peer-checked:scale-125 peer-checked:grayscale-0 grayscale transition-all">😊</span>
+                    </label>
+                     <label class="cursor-pointer">
+                        <input type="radio" name="rating" value="🤩" class="sr-only peer">
+                        <span class="peer-checked:scale-125 peer-checked:grayscale-0 grayscale transition-all">🤩</span>
+                    </label>
+                </div>
+            </div>
+            <div class="pt-2">
+                <button type="submit" id="submitFeedback" class="btn btn-primary w-full justify-center">Kirim Masukan</button>
+            </div>
+            <div id="feedbackMessage" class="hidden text-center p-3 rounded-lg"></div>
+        </div>
+    </form>
+</div>
         <!-- Footer -->
         <footer class="text-center mt-12 py-6 border-t">
             <p class="text-gray-500">&copy; 2025 UmrohPrompt.ai - Dibuat untuk membantu perencanaan ibadah Anda.</p>
@@ -314,7 +359,41 @@
              promptOutput.textContent = '';
         });
 
+// === Kode untuk Form Feedback ===
+const scriptURL = 'https://script.google.com/macros/s/AKfycbxLNoTVLvWIx8R2zRAiTG-cb4Y1rzZCYx_rmeaCuiAfRjJUZOQ_Ui1YgReOeHa8gZQO8A/exec'; // <-- PENTING! Ganti dengan URL Anda
+const form = document.forms['submit-to-google-sheet'];
+const submitButton = document.getElementById('submitFeedback');
+const feedbackMessage = document.getElementById('feedbackMessage');
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  submitButton.disabled = true;
+  submitButton.textContent = 'Mengirim...';
+
+  fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+    .then(response => response.json())
+    .then(data => {
+        if(data.result === 'success') {
+            feedbackMessage.textContent = 'Terima kasih! Masukan Anda telah kami terima.';
+            feedbackMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700');
+            feedbackMessage.classList.add('bg-emerald-100', 'text-emerald-700');
+            form.reset();
+        } else {
+            throw new Error(data.message || 'Terjadi kesalahan.');
+        }
+    })
+    .catch(error => {
+      console.error('Error!', error.message);
+      feedbackMessage.textContent = 'Oops! Gagal mengirim masukan. Coba lagi nanti.';
+      feedbackMessage.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-700');
+      feedbackMessage.classList.add('bg-red-100', 'text-red-700');
+    })
+    .finally(() => {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Kirim Masukan';
+    });
+});
+
     </script>
 </body>
 </html>
-
